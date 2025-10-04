@@ -38,42 +38,42 @@ cd NASA-App
 ---
 ### 2. Configurar el backend
 
-# Navega a la carpeta del backend
+Navega a la carpeta del backend
 cd backend
 
-# Crea un entorno virtual
+Crea un entorno virtual
 python -m venv venv
 
-# Activa el entorno virtual
-# En Windows:
+Activa el entorno virtual
+En Windows:
 venv\Scripts\activate
-# En macOS/Linux:
+En macOS/Linux:
 source venv/bin/activate
 
-# Instala las dependencias de Python
+Instala las dependencias de Python
 pip install -r requirements.txt
 
 Nota: El archivo publications.json ya está incluido, no es necesario ejecutar ningún script para generarlo.
 
 ### 3. Configurar el Frontend (React)
 
-# Desde la raíz del proyecto, navega a la carpeta del frontend
+Desde la raíz del proyecto, navega a la carpeta del frontend
 cd ../frontend
 
-# Instala las dependencias de Node.js
-# Usamos --legacy-peer-deps para resolver conflictos de versión con React
+Instala las dependencias de Node.js
+Usamos --legacy-peer-deps para resolver conflictos de versión con React
 npm install --legacy-peer-deps
 
 ## ¡Iniciar la Aplicación!
 Necesitas dos terminales abiertas simultáneamente.
 
 En la Terminal 1 (Backend):
-# (Asegúrate de estar en la carpeta 'backend' y con 'venv' activado)
-# Usamos "python -m" para mayor compatibilidad
+(Asegúrate de estar en la carpeta 'backend' y con 'venv' activado)
+Usamos "python -m" para mayor compatibilidad
 python -m uvicorn main:app --reload
 
 En la Terminal 2 (Frontend):
-# (Asegúrate de estar en la carpeta 'frontend')
+(Asegúrate de estar en la carpeta 'frontend')
 npm start
 
 La aplicación debería abrirse automáticamente en http://localhost:3000.
