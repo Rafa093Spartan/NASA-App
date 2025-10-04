@@ -1,7 +1,17 @@
-import axios from "axios";
+// NasabioDasbohard/frontend/src/services/api.js (Versión final)
 
-const API_URL = "http://127.0.0.1:8000";
+import axios from 'axios';
 
-export const fetchPublications = () => axios.get(`${API_URL}/publications`);
-export const searchPublications = (query) =>
-  axios.get(`${API_URL}/search?q=${query}`);
+const apiClient = axios.create({
+  baseURL: 'http://localhost:8000',
+});
+
+export const searchPublications = (query) => {
+  return apiClient.get(`/search?q=${query}`);
+};
+
+// Se cambió el nombre de 'getWordCloudData' a 'getTopKeywordsData'
+// y la URL de '/wordcloud' a '/top-keywords'
+export const getTopKeywordsData = () => {
+  return apiClient.get('/top-keywords');
+};
