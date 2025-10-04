@@ -35,6 +35,7 @@ Sigue estos pasos para tener el proyecto corriendo en tu máquina local.
 
 git clone [https://github.com/Rafa093Spartan/NASA-App.git](https://github.com/Rafa093Spartan/NASA-App.git)
 cd NASA-App
+
 ---
 ### 2. Configurar el backend
 
@@ -55,6 +56,7 @@ pip install -r requirements.txt
 
 Nota: El archivo publications.json ya está incluido, no es necesario ejecutar ningún script para generarlo.
 
+---
 ### 3. Configurar el Frontend (React)
 
 Desde la raíz del proyecto, navega a la carpeta del frontend
@@ -64,7 +66,8 @@ Instala las dependencias de Node.js
 Usamos --legacy-peer-deps para resolver conflictos de versión con React
 npm install --legacy-peer-deps
 
-## ¡Iniciar la Aplicación!
+---
+## 4. ¡Iniciar la Aplicación!
 Necesitas dos terminales abiertas simultáneamente.
 
 En la Terminal 1 (Backend):
@@ -78,6 +81,7 @@ npm start
 
 La aplicación debería abrirse automáticamente en http://localhost:3000.
 
+---
 ## 🤝 Flujo de Trabajo (Workflow)
 Nunca trabajes en la rama main.
 
@@ -87,6 +91,9 @@ Crea una nueva rama para tu tarea: git checkout -b nombre-de-tu-rama.
 
 Cuando termines, sube tus cambios (git push) y crea un Pull Request en GitHub para que el equipo revise tu código.
 
+---
 ## 🔧 Solución de Problemas
 Error de activate en PowerShell (Windows): Si al intentar activar el venv en PowerShell recibes un error sobre políticas de ejecución, abre PowerShell como Administrador y ejecuta el siguiente comando. Responde S (Sí a todo) cuando te pregunte.
 Set-ExecutionPolicy RemoteSigned
+
+---
