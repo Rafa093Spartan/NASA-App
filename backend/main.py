@@ -20,8 +20,9 @@ app = FastAPI()
 
 # ⚠️ Aquí corregimos los orígenes permitidos
 origins = [
-    "http://localhost:3000",  # React (frontend)
+    "https://biofinderr.vercel.app/",  # Frontend desplegado
     "http://localhost:8000"   # FastAPI (backend)
+    
 ]
 
 app.add_middleware(
