@@ -1,13 +1,42 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 1. Importar la tipografía principal desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* 2. Directivas de Tailwind CSS 
+  Asegúrate de que estas tres líneas estén al principio de tu archivo
+  para que Tailwind pueda procesar y aplicar sus clases de utilidad.
+*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 3. Estilos base para el cuerpo de la página */
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  /* Usamos 'Inter' como fuente principal, con un fallback a fuentes del sistema */
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  
+  /* Colores base que coinciden con nuestro tema de Tailwind (bg-gray-50 y text-gray-800) */
+  background-color: #F9FAFB; 
+  color: #1F2937;
+
+  /* Mejoras de renderizado de fuentes */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* 4. Mejoras sutiles de Experiencia de Usuario (UX) */
+
+/* Scroll suave al navegar con anclas (#) */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Estilo personalizado para el texto seleccionado */
+::selection {
+  background-color: #3b82f6; /* Azul-500 de Tailwind */
+  color: #ffffff;
 }

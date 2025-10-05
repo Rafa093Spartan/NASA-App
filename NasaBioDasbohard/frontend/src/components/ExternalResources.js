@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 const resources = [
   {
@@ -18,26 +19,64 @@ const resources = [
   }
 ];
 
+// Variantes de animación para el contenedor y los items
+const containerVariants = { 
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1, // Anima cada hijo con 0.1s de diferencia
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 }, // Empieza 20px abajo e invisible
+  visible: { y: 0, opacity: 1 }, // Termina en su posición y visible
+};
+
 function ExternalResources() {
   return (
-    <div className="mt-12">
-      <h2 className="text-2xl font-bold text-center mb-6">Otros Recursos Oficiales de NASA</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="mt-16 pt-12 border-t border-gray-200">
+      <h2 className="text-xl font-semibold text-center text-gray-800 mb-8">
+        Otros Recursos Oficiales
+      </h2>
+      
+      <motion.div 
+        className="max-w-2xl mx-auto space-y-4"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible" // La animación se activa cuando el componente entra en la pantalla
+        viewport={{ once: true, amount: 0.3 }} // Se activa una vez, cuando el 30% es visible
+      >
         {resources.map((resource) => (
-          <div key={resource.name} className="border border-gray-300 rounded-lg p-4 flex flex-col">
-            <h3 className="text-lg font-bold mb-2">{resource.name}</h3>
-            <p className="text-gray-600 text-sm flex-grow mb-4">{resource.description}</p>
-            <a 
-              href={resource.link} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="mt-auto bg-gray-700 text-white font-semibold py-2 px-4 rounded text-center hover:bg-gray-900 transition-colors"
-            >
-              Explorar Recurso
-            </a>
-          </div>
+          <motion.a 
+            key={resource.name}
+            href={resource.link} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="block p-5 rounded-lg hover:bg-gray-100 transition-colors group"
+            variants={itemVariants} // Cada item de la lista usa las variantes de animación
+          >
+            <div className="flex items-center justify-between">
+              <h3 className="text-md font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                {resource.name}
+              </h3>
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="h-5 w-5 text-gray-400 group-hover:text-blue-600 transition-transform duration-300 group-hover:translate-x-1" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </div>
+            <p className="text-gray-600 text-sm mt-1">{resource.description}</p>
+          </motion.a>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { searchPublications } from "./services/api"; 
+import { searchPublications } from "./services/api";
 import SearchBar from "./components/SearchBar";
 import PublicationList from "./components/PublicationList";
-import KnowledgeCloud from './components/KnowledgeCloud';
-import TopKeywordsChart from './components/TopKeywordsChart';
 import ExternalResources from './components/ExternalResources';
 
+// Se eliminan los imports de componentes que no se usarán en la vista principal
+// import KnowledgeCloud from './components/KnowledgeCloud';
+// import TopKeywordsChart from './components/TopKeywordsChart';
+// import ExternalResources from './components/ExternalResources';
+
 function App() {
-  // Eliminamos el estado 'allPublications' que no se usaba
   const [displayedPublications, setDisplayedPublications] = useState([]);
   const [query, setQuery] = useState("");
-  const [loading, setLoading] = useState(true); // Empezamos en 'true'
+  const [loading, setLoading] = useState(true);
 
-  // useEffect ahora solo carga las publicaciones una vez al inicio
+  // --- Toda tu lógica de carga y búsqueda permanece intacta ---
   useEffect(() => {
     const loadInitialPublications = async () => {
       setLoading(true);
       try {
-        const response = await searchPublications(''); 
+        const response = await searchPublications('');
         setDisplayedPublications(response.data);
       } catch (error) {
         console.error("Error al cargar publicaciones:", error);
@@ -28,11 +30,9 @@ function App() {
     loadInitialPublications();
   }, []);
 
-  // La función de búsqueda ahora es más simple
   const handleSearch = async () => {
     setLoading(true);
     try {
-      // Si la búsqueda está vacía, searchPublications('') devolverá todo
       const response = await searchPublications(query);
       setDisplayedPublications(response.data);
     } catch (error) {
@@ -42,9 +42,8 @@ function App() {
     }
   };
   
-  // La búsqueda por palabra clave usa la misma lógica
   const handleKeywordSearch = async (keyword) => {
-    setQuery(keyword); // Actualizamos el input
+    setQuery(keyword);
     setLoading(true);
     try {
       const response = await searchPublications(keyword);
@@ -56,25 +55,40 @@ function App() {
     }
   };
 
+  // --- Aquí comienza el rediseño visual ---
   return (
-    <div className="min-h-screen p-6 bg-gray-100 font-sans">
-      <h1 className="text-3xl font-bold mb-6 text-center">
-        NASA Bioscience Knowledge Engine 🚀
-      </h1>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <KnowledgeCloud />
-        <TopKeywordsChart />
-      </div>
-      <SearchBar query={query} setQuery={setQuery} onSearch={handleSearch} />
-      {loading ? (
-        <p className="text-center text-lg mt-8">Cargando datos de la NASA...</p>
-      ) : (
-        <PublicationList 
-          publications={displayedPublications} 
-          onKeywordClick={handleKeywordSearch}
+    <div className="bg-white min-h-screen text-gray-800 font-sans">
+      <main className="max-w-3xl mx-auto px-6 py-16 sm:py-24">
+        
+        
+        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-center mb-2">
+          BioFinder
+        </h1>
+        
+        <p className="text-gray-500 text-center text-lg mb-12">
+          Un motor de búsqueda para publicaciones científicas.
+        </p>
+        
+        <SearchBar 
+          query={query} 
+          setQuery={setQuery} 
+          onSearch={handleSearch} 
         />
-      )}
-      <ExternalResources />
+        
+        <div className="mt-12">
+          {loading ? (
+            <p className="text-center text-gray-500 animate-pulse">Buscando publicaciones...</p>
+          ) : (
+            <PublicationList 
+              publications={displayedPublications} 
+              onKeywordClick={handleKeywordSearch}
+            />
+          )}
+        </div>
+
+        <ExternalResources />
+
+      </main>
     </div>
   );
 }
