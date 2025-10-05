@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: 'https://nasa-backend-up74.onrender.com',
 });
 
 export const searchPublications = (query) => {
@@ -29,3 +29,5 @@ export const sendChatMessage = (history, question, context) => {
 export const searchPublicationsAI = (query) => {
   return apiClient.post('/search-ai', { text: query });
 };
+
+

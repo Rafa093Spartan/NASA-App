@@ -4,7 +4,7 @@ __pycache__/
 *.pyc
 
 # Archivo de datos generado localmente
-/backend/publications.json
+
 
 # Dependencias de Node.js
 /frontend/node_modules/
