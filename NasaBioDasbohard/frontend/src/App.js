@@ -4,6 +4,7 @@ import SearchBar from "./components/SearchBar";
 import PublicationList from "./components/PublicationList";
 import KnowledgeCloud from './components/KnowledgeCloud';
 import TopKeywordsChart from './components/TopKeywordsChart';
+import ExternalResources from './components/ExternalResources';
 
 function App() {
   // Eliminamos el estado 'allPublications' que no se usaba
@@ -73,6 +74,7 @@ function App() {
           onKeywordClick={handleKeywordSearch}
         />
       )}
+      <ExternalResources />
     </div>
   );
 }
