@@ -16,11 +16,16 @@ export const summarizeText = (textToSummarize) => {
   return apiClient.post('/summarize', { text: textToSummarize });
 };
 
-// --- AÑADE ESTA NUEVA FUNCIÓN PARA EL CHAT ---
+// --- CHAT ---
 export const sendChatMessage = (history, question, context) => {
   return apiClient.post('/chat', {
     history: history,
     question: question,
     context: context
   });
+};
+
+// --- NUEVA FUNCIÓN: BÚSQUEDA CON IA ---
+export const searchPublicationsAI = (query) => {
+  return apiClient.post('/search-ai', { text: query });
 };

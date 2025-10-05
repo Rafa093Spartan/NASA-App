@@ -114,3 +114,33 @@ def handle_chat(request: ChatRequest):
     except Exception as e:
         print(f"Ocurrió un error con la API de Google en el chat: {e}")
         return {"error": str(e)}
+
+@app.post("/search-ai")
+def search_ai(request: SummarizeRequest):
+    model = genai.GenerativeModel('models/gemini-pro-latest')
+    
+    prompt = f"""
+    Eres un asistente de búsqueda de publicaciones científicas.
+    El usuario escribió: "{request.text}".
+    Devuelve SOLO las palabras clave principales que debería usar
+    para buscar en una base de datos de artículos científicos.
+    Responde con una lista separada por comas.
+    """
+
+    try:
+        response = model.generate_content(prompt)
+        keywords = response.text.split(",")
+        results = []
+        for pub in publications:
+            titulo = pub["titulo"].lower()
+            resumen = pub.get("resumen", "").lower()
+            for k in keywords:
+                k = k.strip().lower()
+                if k and (k in titulo or k in resumen):
+                    results.append(pub)
+                    break
+        return results
+    except Exception as e:
+        print(f"Error en search-ai: {e}")
+        return {"error": str(e)}
+    
