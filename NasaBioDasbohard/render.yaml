@@ -1,0 +1,15 @@
+# render.yaml
+services:
+  # Configuración para tu API (el backend)
+  - type: web
+    name: biofi-api
+    env: python
+    # CRÍTICO: Indica que solo use la carpeta 'backend'
+    rootDir: backend
+    plan: free # O 'starter' si necesitas más
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python main.py"
+    # El puerto por defecto para Render es 10000
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.8 # Puedes cambiar la versión de Python si lo necesitas
