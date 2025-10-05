@@ -1,5 +1,3 @@
-# NasabioDasbohard/backend/main.py (Versión final)
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
@@ -9,6 +7,16 @@ import re
 from nltk.corpus import stopwords
 from wordcloud import WordCloud
 import io
+import os
+from dotenv import load_dotenv
+import google.generativeai as genai
+from pydantic import BaseModel
+from typing import List
+
+# --- Configuración de la IA ---
+load_dotenv()
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+# ---------------------------
 
 app = FastAPI()
 
@@ -27,7 +35,6 @@ with open("publications.json", "r", encoding="utf-8") as f:
 def get_word_frequencies():
     STOP_WORDS = set(stopwords.words('english'))
     STOP_WORDS.update(["study", "results", "data", "methods", "introduction", "conclusions", "background", "purpose", "figure", "table"])
-    
     all_keywords = []
     for pub in publications:
         if "keywords" in pub and pub["keywords"]:
@@ -40,8 +47,7 @@ def get_word_frequencies():
 
 @app.get("/search")
 def search_publications(q: str = ""):
-    if not q:
-        return publications
+    if not q: return publications
     query = q.lower()
     results = []
     for pub in publications:
@@ -65,3 +71,46 @@ def get_wordcloud_image():
     wc.to_image().save(img_buffer, 'PNG')
     img_buffer.seek(0)
     return StreamingResponse(img_buffer, media_type="image/png")
+
+# --- SECCIÓN DE IA (ACTUALIZADA) ---
+
+class SummarizeRequest(BaseModel):
+    text: str
+
+@app.post("/summarize")
+def get_summary(request: SummarizeRequest):
+    model = genai.GenerativeModel('models/gemini-pro-latest')
+    prompt = f'Eres un experto en comunicación científica. Tu misión es tomar el siguiente resumen técnico (abstract) de una publicación de biología espacial y reescribirlo en un párrafo corto (máximo 4 oraciones) que sea fácil de entender para un público general, como un estudiante de preparatoria. No uses jerga complicada. Resumen técnico: "{request.text}" Resumen simplificado:'
+    try:
+        response = model.generate_content(prompt)
+        return {"summary": response.text}
+    except Exception as e:
+        print(f"Ocurrió un error con la API de Google en summarize: {e}")
+        return {"error": str(e)}
+
+class ChatMessage(BaseModel):
+    role: str
+    parts: List[str]
+
+class ChatRequest(BaseModel):
+    history: List[ChatMessage]
+    question: str
+    context: str
+
+@app.post("/chat")
+def handle_chat(request: ChatRequest):
+    model = genai.GenerativeModel('models/gemini-pro-latest')
+    chat_history = []
+    for message in request.history:
+        chat_history.append({'role': message.role, 'parts': message.parts})
+    
+    chat = model.start_chat(history=chat_history)
+    
+    prompt = f"Contexto: Estás respondiendo preguntas sobre el siguiente resumen de una publicación científica de la NASA.\n---\n{request.context}\n---\nPregunta del usuario: {request.question}\n\nResponde la pregunta basándote únicamente en el contexto proporcionado. Si la respuesta no está en el texto, di que no tienes esa información."
+    
+    try:
+        response = chat.send_message(prompt)
+        return {"response": response.text}
+    except Exception as e:
+        print(f"Ocurrió un error con la API de Google en el chat: {e}")
+        return {"error": str(e)}

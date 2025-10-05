@@ -1,5 +1,3 @@
-// NasabioDasbohard/frontend/src/services/api.js (Versión final)
-
 import axios from 'axios';
 
 const apiClient = axios.create({
@@ -10,8 +8,19 @@ export const searchPublications = (query) => {
   return apiClient.get(`/search?q=${query}`);
 };
 
-// Se cambió el nombre de 'getWordCloudData' a 'getTopKeywordsData'
-// y la URL de '/wordcloud' a '/top-keywords'
 export const getTopKeywordsData = () => {
   return apiClient.get('/top-keywords');
+};
+
+export const summarizeText = (textToSummarize) => {
+  return apiClient.post('/summarize', { text: textToSummarize });
+};
+
+// --- AÑADE ESTA NUEVA FUNCIÓN PARA EL CHAT ---
+export const sendChatMessage = (history, question, context) => {
+  return apiClient.post('/chat', {
+    history: history,
+    question: question,
+    context: context
+  });
 };
