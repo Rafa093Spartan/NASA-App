@@ -21,8 +21,9 @@ app = FastAPI()
 # ⚠️ CORRECCIÓN DE CORS: Se quita la barra final "/" y se añade localhost:3000
 origins = [
     "http://localhost:3000",
-
-    "https://biofinderr.vercel.app/", # La nueva URL del error
+    "https://biofinderr.vercel.app",
+    "https://nasa-hkicwnj59-rafa093spartans-projects.vercel.app",
+    "https://nasa-app-sage-iota.vercel.app", # La nueva URL del error
 ]
 
 app.add_middleware(
