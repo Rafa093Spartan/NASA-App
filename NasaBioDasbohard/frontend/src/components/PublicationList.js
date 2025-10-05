@@ -18,11 +18,10 @@ const cardVariants = {
   visible: { y: 0, opacity: 1 },
 };
 
-
 function PublicationCard({ pub, variants }) {
   const [summary, setSummary] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null); // Se mostrará el error en pantalla
   const [isExpanded, setIsExpanded] = useState(false);
   const [chatHistory, setChatHistory] = useState([]);
   const [userQuestion, setUserQuestion] = useState("");
@@ -34,16 +33,10 @@ function PublicationCard({ pub, variants }) {
     setError(null);
     try {
       const response = await summarizeText(pub.resumen);
-      
-      // LÍNEA DE DEPURACIÓN CLAVE: Muestra lo que la API devuelve.
-      console.log('Respuesta de la API:', response.data); 
-      
-      // Asegúrate de que response.data.summary exista y no sea null o undefined.
+      console.log('Respuesta de la API:', response.data);
       setSummary(response.data.summary);
-
     } catch (err) {
       setError("No se pudo generar el resumen.");
-      // LÍNEA DE DEPURACIÓN CLAVE: Muestra si hubo un error en la llamada.
       console.error('Error en la llamada API:', err);
     } finally {
       setIsLoading(false);
@@ -70,14 +63,17 @@ function PublicationCard({ pub, variants }) {
 
   return (
     <motion.div variants={variants} className="bg-white p-6 rounded-lg border border-gray-200 flex flex-col h-full transition-all duration-300 hover:border-gray-300">
-      
       <div className="flex-grow mb-4">
         <h2 className="text-lg font-semibold text-gray-900 mb-2">{pub.titulo}</h2>
         <p className="text-gray-600 text-sm">
           {pub.resumen ? (isExpanded ? pub.resumen : `${pub.resumen.substring(0, 250)}...`) : "Resumen no disponible."}
         </p>
+        {error && <p className="text-red-500 text-sm mt-2">{error}</p>} {/* Mostramos el error */}
         {pub.resumen && pub.resumen.length > 250 && (
-          <button onClick={() => setIsExpanded(!isExpanded)} className="text-blue-600 hover:text-blue-800 text-sm font-medium mt-1 focus:outline-none">
+          <button 
+            onClick={() => setIsExpanded(!isExpanded)} 
+            className="text-blue-600 hover:text-blue-800 text-sm font-medium mt-1 focus:outline-none"
+          >
             {isExpanded ? 'Mostrar menos' : 'Mostrar más'}
           </button>
         )}
@@ -146,7 +142,6 @@ function PublicationCard({ pub, variants }) {
   );
 }
 
-
 function PublicationList({ publications }) { 
   if (!publications || !publications.length) { 
     return <p className="text-center text-gray-500 mt-8">No se encontraron publicaciones. Intenta con otra búsqueda.</p>; 
@@ -164,7 +159,5 @@ function PublicationList({ publications }) {
     </motion.div>
   );
 }
-
-
 
 export default PublicationList;

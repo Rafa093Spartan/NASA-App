@@ -39,7 +39,7 @@ function ExternalResources() {
   return (
     <div className="mt-16 pt-12 border-t border-gray-200">
       <h2 className="text-xl font-semibold text-center text-gray-800 mb-8">
-        Otros Recursos Oficiales
+        Recursos Oficiales
       </h2>
       
       <motion.div 

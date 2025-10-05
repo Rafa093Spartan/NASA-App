@@ -5,8 +5,6 @@ import json
 from collections import Counter
 import re
 from nltk.corpus import stopwords
-from wordcloud import WordCloud
-import io
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
@@ -20,7 +18,12 @@ genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 app = FastAPI()
 
-origins = [ "http://localhost:3000" ]
+# ⚠️ Aquí corregimos los orígenes permitidos
+origins = [
+    "http://localhost:3000",  # React (frontend)
+    "http://localhost:8000"   # FastAPI (backend)
+]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -47,7 +50,8 @@ def get_word_frequencies():
 
 @app.get("/search")
 def search_publications(q: str = ""):
-    if not q: return publications
+    if not q: 
+        return publications
     query = q.lower()
     results = []
     for pub in publications:
@@ -62,15 +66,6 @@ def search_publications(q: str = ""):
 def get_top_keywords_data():
     word_counts = get_word_frequencies()
     return [{"text": word, "value": count} for word, count in word_counts.most_common(50)]
-
-@app.get("/wordcloud-image")
-def get_wordcloud_image():
-    word_counts = get_word_frequencies()
-    wc = WordCloud(width=800, height=400, background_color="white", colormap="viridis").generate_from_frequencies(word_counts)
-    img_buffer = io.BytesIO()
-    wc.to_image().save(img_buffer, 'PNG')
-    img_buffer.seek(0)
-    return StreamingResponse(img_buffer, media_type="image/png")
 
 # --- SECCIÓN DE IA (ACTUALIZADA) ---
 
@@ -143,4 +138,3 @@ def search_ai(request: SummarizeRequest):
     except Exception as e:
         print(f"Error en search-ai: {e}")
         return {"error": str(e)}
-    

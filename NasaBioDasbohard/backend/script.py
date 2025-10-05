@@ -1,5 +1,4 @@
 # script.py (versión con IA para extraer palabras clave)
-
 import csv
 import json
 import requests
