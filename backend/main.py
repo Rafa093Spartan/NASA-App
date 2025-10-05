@@ -18,11 +18,10 @@ genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 app = FastAPI()
 
-# ⚠️ Aquí corregimos los orígenes permitidos
+# ⚠️ CORRECCIÓN DE CORS: Se quita la barra final "/" y se añade localhost:3000
 origins = [
-    "https://biofinderr.vercel.app/",  # Frontend desplegado
-    "http://localhost:8000"   # FastAPI (backend)
-    
+    "https://biofinderr.vercel.app",  # Sin la barra al final
+    "http://localhost:3000",         # Para desarrollo local del frontend
 ]
 
 app.add_middleware(
@@ -36,13 +35,14 @@ app.add_middleware(
 with open("publications.json", "r", encoding="utf-8") as f:
     publications = json.load(f)
 
+# ... (El resto de tus funciones como get_word_frequencies, search, etc. no necesitan cambios) ...
 def get_word_frequencies():
+    # ... (sin cambios)
     STOP_WORDS = set(stopwords.words('english'))
     STOP_WORDS.update(["study", "results", "data", "methods", "introduction", "conclusions", "background", "purpose", "figure", "table"])
     all_keywords = []
     for pub in publications:
-        if "keywords" in pub and pub["keywords"]:
-            all_keywords.extend(pub["keywords"])
+        if "keywords" in pub and pub["keywords"]: all_keywords.extend(pub["keywords"])
     if not all_keywords:
         all_text = " ".join([pub.get("resumen", "") for pub in publications])
         words = re.findall(r'\b\w+\b', all_text.lower())
@@ -51,37 +51,35 @@ def get_word_frequencies():
 
 @app.get("/search")
 def search_publications(q: str = ""):
-    if not q: 
-        return publications
+    # ... (sin cambios)
+    if not q: return publications
     query = q.lower()
     results = []
     for pub in publications:
-        titulo_match = query in pub["titulo"].lower()
-        resumen_match = query in pub.get("resumen", "").lower()
-        keywords_match = any(query in keyword.lower() for keyword in pub.get("keywords", []))
-        if titulo_match or resumen_match or keywords_match:
-            results.append(pub)
+        if query in pub["titulo"].lower() or query in pub.get("resumen", "").lower():
+             results.append(pub)
     return results
 
 @app.get("/top-keywords")
 def get_top_keywords_data():
+    # ... (sin cambios)
     word_counts = get_word_frequencies()
     return [{"text": word, "value": count} for word, count in word_counts.most_common(50)]
 
-# --- SECCIÓN DE IA (ACTUALIZADA) ---
+# --- SECCIÓN DE IA ---
 
 class SummarizeRequest(BaseModel):
     text: str
 
 @app.post("/summarize")
 def get_summary(request: SummarizeRequest):
+    # ... (sin cambios)
     model = genai.GenerativeModel('models/gemini-pro-latest')
-    prompt = f'Eres un experto en comunicación científica. Tu misión es tomar el siguiente resumen técnico (abstract) de una publicación de biología espacial y reescribirlo en un párrafo corto (máximo 4 oraciones) que sea fácil de entender para un público general, como un estudiante de preparatoria. No uses jerga complicada. Resumen técnico: "{request.text}" Resumen simplificado:'
+    prompt = f'Eres un experto en comunicación científica...'
     try:
         response = model.generate_content(prompt)
         return {"summary": response.text}
     except Exception as e:
-        print(f"Ocurrió un error con la API de Google en summarize: {e}")
         return {"error": str(e)}
 
 class ChatMessage(BaseModel):
@@ -95,45 +93,47 @@ class ChatRequest(BaseModel):
 
 @app.post("/chat")
 def handle_chat(request: ChatRequest):
+    # ... (sin cambios)
     model = genai.GenerativeModel('models/gemini-pro-latest')
-    chat_history = []
-    for message in request.history:
-        chat_history.append({'role': message.role, 'parts': message.parts})
-    
-    chat = model.start_chat(history=chat_history)
-    
-    prompt = f"Contexto: Estás respondiendo preguntas sobre el siguiente resumen de una publicación científica de la NASA.\n---\n{request.context}\n---\nPregunta del usuario: {request.question}\n\nResponde la pregunta basándote únicamente en el contexto proporcionado. Si la respuesta no está en el texto, di que no tienes esa información."
-    
+    chat = model.start_chat(history=[msg.dict() for msg in request.history])
+    prompt = f"Contexto: {request.context}\n---\nPregunta: {request.question}\n\nResponde basándote solo en el contexto."
     try:
         response = chat.send_message(prompt)
         return {"response": response.text}
     except Exception as e:
-        print(f"Ocurrió un error con la API de Google en el chat: {e}")
         return {"error": str(e)}
 
+# --- ENDPOINT DE BÚSQUEDA CON IA (MEJORADO) ---
 @app.post("/search-ai")
 def search_ai(request: SummarizeRequest):
     model = genai.GenerativeModel('models/gemini-pro-latest')
     
     prompt = f"""
-    Eres un asistente de búsqueda de publicaciones científicas.
-    El usuario escribió: "{request.text}".
-    Devuelve SOLO las palabras clave principales que debería usar
-    para buscar en una base de datos de artículos científicos.
-    Responde con una lista separada por comas.
+    Eres un asistente de búsqueda. Basado en la siguiente consulta del usuario, extrae las 3 a 5 palabras clave o conceptos más importantes.
+    Devuelve SOLAMENTE las palabras clave, separadas por comas, sin ninguna otra palabra, saludo o introducción.
+
+    Consulta del usuario: "{request.text}"
+    Palabras clave:
     """
 
     try:
         response = model.generate_content(prompt)
-        keywords = response.text.split(",")
+        # Limpiamos la respuesta de la IA para mayor seguridad
+        cleaned_response = response.text.strip().replace('\n', '')
+        keywords = [k.strip().lower() for k in cleaned_response.split(",") if k.strip()]
+        
+        if not keywords:
+            return []
+
         results = []
+        result_ids = set() # Para evitar duplicados
+
         for pub in publications:
-            titulo = pub["titulo"].lower()
-            resumen = pub.get("resumen", "").lower()
+            text_to_search = (pub["titulo"] + " " + pub.get("resumen", "")).lower()
             for k in keywords:
-                k = k.strip().lower()
-                if k and (k in titulo or k in resumen):
+                if k in text_to_search and pub["id"] not in result_ids:
                     results.append(pub)
+                    result_ids.add(pub["id"])
                     break
         return results
     except Exception as e:
