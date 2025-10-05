@@ -22,7 +22,7 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",
 
-    "https://nasa-hkicwnj59-rafa093spartans-projects.vercel.app", # La nueva URL del error
+    "https://biofinderr.vercel.app/", # La nueva URL del error
 ]
 
 app.add_middleware(
