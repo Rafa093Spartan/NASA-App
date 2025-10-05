@@ -20,8 +20,7 @@ app = FastAPI()
 
 # ⚠️ CORRECCIÓN DE CORS: Se quita la barra final "/" y se añade localhost:3000
 origins = [
-    "https://biofinderr.vercel.app",  # Sin la barra al final
-    "http://localhost:3000",         # Para desarrollo local del frontend
+    "https://biofinderr.vercel.app"         # Para desarrollo local del frontend
 ]
 
 app.add_middleware(
