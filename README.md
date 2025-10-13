@@ -1,99 +1,84 @@
-# Motor de Conocimiento de Biología Espacial de la NASA 🚀
+# Computación en la Nube y Sistemas Distribuidos
 
-Este proyecto es un motor de conocimiento interactivo para explorar las publicaciones de biología espacial de la NASA, desarrollado para el NASA International Space Apps Challenge. Transforma datos complejos en un dashboard visual y fácil de navegar.
-
----
-## ✨ Características
-
-* **Dashboard Interactivo:** Visualiza los temas de investigación más frecuentes a través de una nube de palabras generada por el backend y una gráfica de barras.
-* **Búsqueda Inteligente:** Filtra más de 600 publicaciones por título, resumen y palabras clave.
-* **Exploración por Etiquetas:** Haz clic en cualquier palabra clave para descubrir instantáneamente todas las investigaciones relacionadas con ese tema.
-* **Acceso Directo a la Fuente:** Cada publicación incluye un enlace directo al artículo completo en la base de datos de PubMed.
+## ¿Qué es la computación en la nube y cómo se relaciona con los sistemas distribuidos?
+La computación en la nube (Cloud Computing) es un modelo que permite el acceso bajo demanda a través de la red a un conjunto compartido de recursos informáticos configurables, como redes, servidores, almacenamiento, aplicaciones y servicios. Estos recursos pueden ser rápidamente aprovisionados y liberados con un mínimo esfuerzo de gestión o interacción con el proveedor del servicio. ☁️
 
 ---
-## 💻 Tecnologías Utilizadas
-
-* **Backend:** Python, FastAPI, NLTK, WordCloud
-* **Frontend:** React, Tailwind CSS, Chart.js
-* **Despliegue (Planeado):** Vercel (Frontend), Render (Backend)
+La relación con los sistemas distribuidos es intrínseca y fundamental. La nube es, en esencia, una evolución a gran escala de los sistemas distribuidos. Un sistema distribuido es un conjunto de computadoras autónomas que se comunican entre sí a través de una red y que colaboran para realizar una tarea, presentándose ante el usuario como un único sistema coherente. La infraestructura de la nube se basa en este principio, utilizando miles de servidores interconectados en centros de datos distribuidos globalmente. La virtualización permite abstraer y agrupar estos recursos físicos (CPU, RAM, almacenamiento) para ofrecerlos como servicios elásticos y escalables, ocultando la complejidad subyacente al usuario final.
 
 ---
-## 📋 Requisitos Previos
+## Modelos de Servicio Fundamentales
+Los servicios en la nube se clasifican generalmente en tres modelos principales, que se pueden visualizar como niveles de una pirámide de gestión, donde cada capa superior abstrae más la complejidad de la inferior.
 
-Asegúrate de tener instalado el siguiente software en tu sistema:
-* [Python 3.8+](https://www.python.org/downloads/)
-* [Node.js (LTS)](https://nodejs.org/)
-* [Git](https://git-scm.com/downloads)
+--- 
+### IaaS (Infraestructura como Servicio): 
+Es el modelo más básico. Proporciona los bloques de construcción fundamentales de la computación: recursos de red, almacenamiento y servidores virtualizados (máquinas virtuales). Ofrece el mayor nivel de flexibilidad y control sobre los recursos de TI, siendo análogo a alquilar el hardware de un centro de datos sin tener que comprarlo ni gestionarlo físicamente. El usuario es responsable de administrar el sistema operativo, el middleware y las aplicaciones.
 
----
-## 🚀 Guía de Instalación y Puesta en Marcha
-
-Sigue estos pasos para tener el proyecto corriendo en tu máquina local.
-
-### 1. Clonar el Repositorio
-
-
-git clone [https://github.com/Rafa093Spartan/NASA-App.git](https://github.com/Rafa093Spartan/NASA-App.git)
-cd NASA-App
+Ejemplos: Amazon Web Services (AWS) EC2, Google Compute Engine (GCE), Microsoft Azure Virtual Machines.
 
 ---
-### 2. Configurar el backend
+### PaaS (Plataforma como Servicio): 
+Este modelo elimina la necesidad de que las organizaciones administren la infraestructura subyacente (hardware y sistemas operativos) y les permite centrarse en el desarrollo, despliegue y gestión de aplicaciones. Proporciona un entorno o plataforma con herramientas de software, bases de datos y sistemas operativos listos para usar. Es ideal para desarrolladores, ya que agiliza el ciclo de vida del software.
 
-Navega a la carpeta del backend
-cd backend
-
-Crea un entorno virtual
-python -m venv venv
-
-Activa el entorno virtual
-En Windows:
-venv\Scripts\activate
-En macOS/Linux:
-source venv/bin/activate
-
-Instala las dependencias de Python
-pip install -r requirements.txt
-
-Nota: El archivo publications.json ya está incluido, no es necesario ejecutar ningún script para generarlo.
+Ejemplos: Heroku, Google App Engine, AWS Elastic Beanstalk.
 
 ---
-### 3. Configurar el Frontend (React)
+### SaaS (Software como Servicio):
+Es el modelo más completo y conocido. Ofrece un producto de software terminado que es gestionado íntegramente por el proveedor. Los usuarios acceden a la aplicación a través de un navegador web o una API, generalmente bajo un modelo de suscripción. No tienen que preocuparse por la instalación, el mantenimiento o la infraestructura subyacente.
 
-Desde la raíz del proyecto, navega a la carpeta del frontend
-cd ../frontend
-
-Instala las dependencias de Node.js
-Usamos --legacy-peer-deps para resolver conflictos de versión con React
-npm install --legacy-peer-deps
+Ejemplos: Google Workspace, Salesforce, Dropbox, Microsoft 365.
 
 ---
-## 4. ¡Iniciar la Aplicación!
-Necesitas dos terminales abiertas simultáneamente.
+## Modelos de Despliegue
+Nube Pública: La infraestructura es propiedad de un proveedor externo (como AWS, Google Cloud o Azure) que la pone a disposición del público general a través de internet. Es el modelo más común y ofrece enormes economías de escala, escalabilidad casi ilimitada y un modelo de pago por uso.
 
-En la Terminal 1 (Backend):
-(Asegúrate de estar en la carpeta 'backend' y con 'venv' activado)
-Usamos "python -m" para mayor compatibilidad
-python -m uvicorn main:app --reload
-
-En la Terminal 2 (Frontend):
-(Asegúrate de estar en la carpeta 'frontend')
-npm start
-
-La aplicación debería abrirse automáticamente en http://localhost:3000.
+### Nube Privada: 
+La infraestructura de la nube es utilizada exclusivamente por una única organización. Puede estar ubicada en el centro de datos local de la empresa (on-premise) o ser alojada por un proveedor externo. Ofrece mayor control, seguridad y privacidad, pero a un costo mayor y con menos escalabilidad.
 
 ---
-## 🤝 Flujo de Trabajo (Workflow)
-Nunca trabajes en la rama main.
+### Nube Híbrida: 
+Combina una nube privada con una o más nubes públicas. Permite a las organizaciones mantener sus aplicaciones y datos críticos en la nube privada por seguridad, mientras aprovechan los recursos de la nube pública para cargas de trabajo menos sensibles, picos de demanda (cloud bursting) o recuperación ante desastres.
 
-Antes de empezar algo nuevo, actualiza tu copia local: git pull origin main.
-
-Crea una nueva rama para tu tarea: git checkout -b nombre-de-tu-rama.
-
-Cuando termines, sube tus cambios (git push) y crea un Pull Request en GitHub para que el equipo revise tu código.
+Ejemplo Práctico: Netflix y AWS 🎬
+Netflix es el caso de estudio por excelencia del uso masivo y exitoso de la nube. Migró toda su infraestructura de centros de datos privados a Amazon Web Services (AWS) para lograr escalabilidad global y resiliencia.
 
 ---
-## 🔧 Solución de Problemas
-Error de activate en PowerShell (Windows): Si al intentar activar el venv en PowerShell recibes un error sobre políticas de ejecución, abre PowerShell como Administrador y ejecuta el siguiente comando. Responde S (Sí a todo) cuando te pregunte.
-Set-ExecutionPolicy RemoteSigned
+### Computación y Transcodificación (IaaS):
+Netflix utiliza miles de instancias de Amazon EC2 para transcodificar sus archivos de video maestros a cientos de formatos y resoluciones diferentes, optimizados para cada dispositivo y velocidad de conexión. Este proceso masivamente paralelo es perfecto para la elasticidad de la nube.
 
 ---
+### Almacenamiento (IaaS): 
+Almacena petabytes de contenido de video en Amazon S3, un servicio de almacenamiento de objetos altamente duradero y escalable.
+
+---
+### Bases de Datos (PaaS): 
+Gestiona toda la información de sus más de 200 millones de suscriptores, historiales de visualización y recomendaciones personalizadas utilizando bases de datos gestionadas por AWS como DynamoDB y Aurora.
+
+---
+### Escalabilidad Global: 
+La infraestructura global de AWS permite a Netflix desplegar su servicio cerca de sus usuarios en todo el mundo, reduciendo la latencia. Cuando se estrena una serie popular, la plataforma escala automáticamente para soportar millones de solicitudes simultáneas y vuelve a reducir su tamaño cuando la demanda baja, optimizando costos.
+
+---
+## Ventajas de la Nube vs. On-Premise
+La adopción de la nube ofrece ventajas significativas sobre las arquitecturas tradicionales donde la empresa posee y gestiona su propia infraestructura (on-premise):
+
+Sustitución de Gasto de Capital por Gasto Variable: En lugar de una gran inversión inicial en hardware (CapEx), se paga una tarifa mensual o por uso (OpEx), mejorando el flujo de caja.
+
+Elasticidad y Escalabilidad: Los recursos se pueden aumentar o disminuir en minutos para adaptarse a la demanda del negocio, algo que en un modelo on-premise llevaría semanas o meses.
+
+Economías de Escala Masivas: Los proveedores de la nube compran hardware a gran escala, lo que reduce los costos y traslada esos ahorros a los clientes.
+
+Agilidad y Velocidad: Se pueden aprovisionar nuevos servicios y entornos de desarrollo casi instantáneamente, lo que permite a las empresas innovar y lanzar productos mucho más rápido.
+
+Alcance Global: Permite desplegar aplicaciones en múltiples regiones geográficas con solo unos clics, proporcionando una mejor experiencia a los usuarios finales en todo el mundo.
+
+Enfoque en el Negocio: Al delegar la gestión de la infraestructura al proveedor de la nube, los equipos de TI pueden centrarse en proyectos que aportan valor directo al negocio en lugar de en el mantenimiento de servidores.
+
+## Bibliografía
+Amazon Web Services. (2025). ¿Qué es la computación en la nube? Recuperado de https://aws.amazon.com/what-is-cloud-computing/
+
+Microsoft Azure. (2025). What are public, private, and hybrid clouds? Recuperado de https://azure.microsoft.com/en-us/resources/cloud-computing-dictionary/what-are-private-public-hybrid-clouds
+
+Netflix Technology Blog. (2025). Netflix on AWS. Recuperado de https://netflixtechblog.com/
+
+Mell, P., & Grance, T. (2011). The NIST Definition of Cloud Computing (SP 800-145). National Institute of Standards and Technology. Recuperado de https://csrc.nist.gov/publications/detail/sp/800-145/final
